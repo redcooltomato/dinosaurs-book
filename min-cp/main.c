@@ -1,17 +1,31 @@
 #include <unistd.h>
 #include <fcntl.h>
-#include <stdio.h>
 #include <errno.h>
 #include <linux/limits.h>
+#include <stdio.h>
+#include <string.h>
 
 
-int main() { // ignore int argc, char *argv[]
+int main(int argc, char *argv[])
+{
     char src_path[PATH_MAX], dest_path[PATH_MAX];
 
-    printf("path to the file contents of which to copy:\n");
-    scanf("%s", src_path);
-    printf("path to the file contents of which are to be overwritten:\n");
-    scanf("%s", dest_path);
+    switch (argc) {
+        case 1:
+            printf("usage:\n%s [source] [destination]\n", argv[0]);
+            return 0;
+        case 2:
+            printf("missing destination file path\n");
+            return 0;
+        case 3:
+            break; // do nothing
+        default:
+            printf("too many arguments\n");
+            return 0;
+    }
+
+    strncpy(src_path, argv[1], PATH_MAX);
+    strncpy(dest_path, argv[2], PATH_MAX);
 
     int src = open(src_path, O_RDONLY);
     if (src == -1) {
@@ -24,8 +38,8 @@ int main() { // ignore int argc, char *argv[]
         return 1;
     }
 
-    const int RW_SIZE = 65536;
-    int buf[RW_SIZE]; // int cuz why not
+    const int RW_SIZE = (1 << 16);
+    char buf[RW_SIZE];
 
     ssize_t read_ret, write_ret;
     do {
@@ -33,7 +47,7 @@ int main() { // ignore int argc, char *argv[]
         if (read_ret == -1) break;
 
         write_ret = write(dest, buf, read_ret);
-    } while (read_ret > 0 && read_ret == RW_SIZE / sizeof(int) && write_ret >= 0);
+    } while (read_ret > 0 && read_ret == RW_SIZE && write_ret >= 0);
 
     if (read_ret == -1) {
         printf("error occured while reading: %d\n", errno);
@@ -45,4 +59,6 @@ int main() { // ignore int argc, char *argv[]
     }
 
     printf("success!\n");
+
+    return 0;
 }
