@@ -1,1 +1,0 @@
-savedcmd_/home/user/dinosaurs-book/proc-module/seconds.mod := printf '%s\n'   seconds.o | awk '!x[$$0]++ { print("/home/user/dinosaurs-book/proc-module/"$$0) }' > /home/user/dinosaurs-book/proc-module/seconds.mod
