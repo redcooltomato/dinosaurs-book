@@ -1,0 +1,1 @@
+savedcmd_/home/user/dinosaurs-book/proc-module/Module.symvers :=  scripts/mod/modpost -M -m       -o /home/user/dinosaurs-book/proc-module/Module.symvers -n -T /home/user/dinosaurs-book/proc-module/modules.order -i Module.symvers -e 
